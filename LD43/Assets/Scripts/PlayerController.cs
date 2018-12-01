@@ -42,10 +42,17 @@ public class PlayerController : MonoBehaviour
             moveDirection = transform.TransformDirection(moveDirection);
         }
 
+        SpriteFaceCamera();
+
         // Apply gravity
         moveDirection.y = moveDirection.y - (gravity * Time.deltaTime);
 
         // Move the controller
         controller.Move(moveDirection * Time.deltaTime);
+    }
+
+    private void SpriteFaceCamera()
+    {
+
     }
 }

@@ -48,6 +48,8 @@ public class InstrumentManager : MonoBehaviour
         baseRhRot = rh.transform.rotation.eulerAngles;
         drumBasePosition = drum.transform.position;
 
+        showOffset = Screen.height;
+
         ShowDrum(showDrum);
     }
 
