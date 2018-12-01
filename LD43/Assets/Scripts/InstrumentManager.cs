@@ -85,8 +85,8 @@ public class InstrumentManager : MonoBehaviour
 
     private void PlayInstrument()
     {
-        int leftNote = GetCurrentNote(Input.GetAxis("LT"));
-        int rightNote = GetCurrentNote(Input.GetAxis("RT"));
+        int leftNote = GetCurrentNote(Input.GetAxis("Vertical"));
+        int rightNote = GetCurrentNote(Input.GetAxis("VerticalR"));
 
         targetLRot = Mathf.Lerp(targetLRot, baseLhRot.z + (leftNote * -angleVariation), lerpValue);
         lh.transform.eulerAngles = new Vector3(0, 0, targetLRot);
@@ -108,17 +108,17 @@ public class InstrumentManager : MonoBehaviour
 
     private int GetCurrentNote(float axis)
     {
-        if (axis > .8f)
+        if (axis >= .5f)
         {
             return 2;
         }
-        else if (axis >= .3f && axis <= .8f)
+        else if (axis <= -.5f)
         {
-            return 1;
+            return 0;
         }
         else
         {
-            return 0;
+            return 1;
         }
     }
 
