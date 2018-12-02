@@ -1,10 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PressurePlate : MonoBehaviour {
 
     public bool triggered = false;
+    public UnityEvent events;
+
+    private bool playerIn = false;
 
 	// Use this for initialization
 	void Start () {
@@ -18,15 +22,26 @@ public class PressurePlate : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Player")
+        if(other.tag == "Player")
         {
-            Debug.Log("Enter");
+            playerIn = true;
         }
-
     }
 
-    private void StatusChange(bool a)
+    private void OnTriggerExit(Collider other)
     {
-
+        if (other.tag == "Player")
+        {
+            playerIn = false;
+        }
     }
+
+    public void Action()
+    {
+        if(playerIn)
+        {
+            events.Invoke();
+        }
+    }
+
 }

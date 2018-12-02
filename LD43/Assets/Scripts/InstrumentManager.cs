@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class InstrumentManager : MonoBehaviour
 {
@@ -18,6 +19,7 @@ public class InstrumentManager : MonoBehaviour
     public List<int> melody;
     public List<string> availableMelodies;
     public float melodyWaitTime = 5f;
+    public UnityEvent[] melodyEvent;
     private Coroutine melodyTiming = null;
 
     private AudioSource speakerL;
@@ -89,17 +91,17 @@ public class InstrumentManager : MonoBehaviour
         int rightNote = GetCurrentNote(Input.GetAxis("VerticalR"));
 
         targetLRot = Mathf.Lerp(targetLRot, baseLhRot.z + (leftNote * -angleVariation), lerpValue);
-        lh.transform.eulerAngles = new Vector3(0, 0, targetLRot);
+        lh.transform.eulerAngles = new Vector3(lh.transform.eulerAngles.x, lh.transform.eulerAngles.y, targetLRot);
 
         targetRRot = Mathf.Lerp(targetRRot, baseRhRot.z + (rightNote * angleVariation), lerpValue);
-        rh.transform.eulerAngles = new Vector3(0, 0, targetRRot);
+        rh.transform.eulerAngles = new Vector3(rh.transform.eulerAngles.x, rh.transform.eulerAngles.y, targetRRot);
 
-        if (Input.GetButtonDown("Y"))
+        if (Input.GetButtonDown("LB"))
         {
             PlayNote(leftNote, notesL, speakerL);
         }
 
-        if (Input.GetButtonDown("B"))
+        if (Input.GetButtonDown("RB"))
         {
             PlayNote(rightNote, notesR, speakerR);
         }
@@ -127,23 +129,25 @@ public class InstrumentManager : MonoBehaviour
         speaker.clip = notes[note];
         speaker.Play();
 
-        if(melody.Count <= 5)
+        if (melody.Count == 5)
         {
             melody.Add(note);
-        }
-        else
-        {
-            if(CheckMelody(melody))
+            if (CheckMelody(melody) != -1)
             {
+                Debug.Log(CheckMelody(melody));
                 Debug.Log("RealMelody");
+                MelodyEvent(CheckMelody(melody));
                 melody.Clear();
             }
             else
             {
                 melody.Clear();
-                melody.Add(note);
             }
             
+        }
+        else if (melody.Count < 5)
+        {
+            melody.Add(note);
         }
 
         if (melodyTiming == null)
@@ -164,19 +168,24 @@ public class InstrumentManager : MonoBehaviour
         melody.Clear();
     }
 
-    private bool CheckMelody(List<int> list)
+    private int CheckMelody(List<int> list)
     {
         List<string> mString = melody.ConvertAll<string>(x => x.ToString());
         string convertedString = string.Join("", mString.ToArray());
-        Debug.Log(convertedString);
+        //Debug.Log(convertedString);
         if (availableMelodies.Any(c => c == convertedString))
         {
-            return true;
+            return availableMelodies.IndexOf(convertedString);
         }
         else
         {
-            return false;
+            return -1;
         }
 
+    }
+
+    public void MelodyEvent(int index)
+    {
+        melodyEvent[index].Invoke();
     }
 }

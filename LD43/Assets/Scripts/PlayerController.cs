@@ -12,6 +12,8 @@ public class PlayerController : MonoBehaviour
     public GameObject instrument;
     private InstrumentManager im;
 
+    public GameObject drumcam;
+
     private Vector3 moveDirection = Vector3.zero;
     private CharacterController controller;
 
@@ -22,6 +24,7 @@ public class PlayerController : MonoBehaviour
         im = instrument.GetComponent<InstrumentManager>();
         // let the gameObject fall down
         gameObject.transform.position = new Vector3(0, 5, 0);
+        
     }
 
     // Update is called once per frame
@@ -29,6 +32,7 @@ public class PlayerController : MonoBehaviour
     {
         if (!im.showDrum)
         {
+            drumcam.SetActive(false);
             if (controller.isGrounded)
             {
                 moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0.0f, Input.GetAxis("Vertical"));
@@ -46,6 +50,9 @@ public class PlayerController : MonoBehaviour
                 moveDirection.z = Input.GetAxis("Vertical") * speed;
                 moveDirection = transform.TransformDirection(moveDirection);
             }
+        } else
+        {
+            drumcam.SetActive(true);
         }
 
         // Apply gravity
