@@ -13,8 +13,7 @@ public class InstrumentManager : MonoBehaviour
     public GameObject rh;
     public GameObject drum;
 
-    public AudioClip[] notesL;
-    public AudioClip[] notesR;
+    public AudioClip[] notes;
 
     public List<int> melody;
     public List<string> availableMelodies;
@@ -98,12 +97,12 @@ public class InstrumentManager : MonoBehaviour
 
         if (Input.GetButtonDown("LB"))
         {
-            PlayNote(leftNote, notesL, speakerL);
+            PlayNote(leftNote, notes, speakerL);
         }
 
         if (Input.GetButtonDown("RB"))
         {
-            PlayNote(rightNote, notesR, speakerR);
+            PlayNote(rightNote+3, notes, speakerR);
         }
 
     }
